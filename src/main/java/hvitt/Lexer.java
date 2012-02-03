@@ -178,5 +178,9 @@ public class Lexer {
             return null;
         }
     }
+    
+    public String getRawLine() {
+        return rawLine;
+    }
 
 }
