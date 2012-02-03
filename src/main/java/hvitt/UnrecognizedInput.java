@@ -6,7 +6,7 @@ public class UnrecognizedInput extends RuntimeException {
     public final int col;
 
 
-    public UnrecognizedInput(String line, int col, int row) {
+    public UnrecognizedInput(String line, int row, int col) {
         super("Unrecognized input");
         this.line = line;
         this.col = col;
