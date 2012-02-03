@@ -71,6 +71,9 @@ To create a lexer configuration from a rules definition file, you use the `Lexer
 
 Where `reader` is a `java.io.Reader` pointing to the config file.
 
+> It is to be noted that the `hvitt`'s rules definition file is parsed using `hvitt` as a lexer and a hand-written recursive-descent parser (well, it doesn't go beyond 2 recursion levels). In other words, the lexer is used to lex its tokens defintion file.
+Yep, that's meta lexing right there, or, put another way, eating your own dog food.
+
 ## Lexing
 
 Once the rules are defined, a lexer can be created by providing a reader pointing to the input to be lexed and the rules:
