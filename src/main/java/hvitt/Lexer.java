@@ -75,7 +75,7 @@ public class Lexer {
             } else {
                 regexp.append("|");
             }
-            regexp.append("(:?");
+            regexp.append("(?:");
             if (m instanceof LexerConfig.RegEx) {
                 regexp.append(((LexerConfig.RegEx) m).regex);
             } else if (m instanceof LexerConfig.Literal) {
