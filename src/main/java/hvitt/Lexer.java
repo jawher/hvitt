@@ -48,6 +48,7 @@ public class Lexer {
     private final BufferedReader reader;
     private String rawLine;
     private String line;
+    private StringBuilder currentColIndentString=new StringBuilder();
     private int lastIndentLen = 0;
     private boolean eof = false;
     private boolean newLine = false;
@@ -119,6 +120,7 @@ public class Lexer {
                 } else {
                     row++;
                     col = 1;
+                    currentColIndentString = new StringBuilder();
                     newLine = true;
                     if (!returnedSomething) {
                         return pop();
@@ -139,6 +141,7 @@ public class Lexer {
             if (indent == null) {
                 indent = new PosString("", row, 1);
             }
+            currentColIndentString.append(indent.data);
             int indentLen = indent.data.length();
             if (indentLen > lastIndentLen) {
                 lastIndentLen = indentLen;
@@ -158,7 +161,11 @@ public class Lexer {
             for (Pair<String, Pattern> kp : matchers) {
                 data = chew(kp._2);
                 if (data != null) {
-                    chew(whiteSpace);
+                    currentColIndentString.append(data.data.replaceAll("[^\\s]", " "));
+                    PosString white = chew(whiteSpace);
+                    if(white!=null) {
+                        currentColIndentString.append(white.data);
+                    }
                     if (cfg.ignoreKey.equals(kp._1)) {
                         return pop();
                     } else {
@@ -168,7 +175,7 @@ public class Lexer {
                 }
             }
 
-            throw new UnrecognizedInput(rawLine, row, col);
+            throw new UnrecognizedInput(rawLine, row, col, currentColIndentString.toString());
         }
     }
 
@@ -187,6 +194,10 @@ public class Lexer {
 
     public String getRawLine() {
         return rawLine;
+    }
+    
+    public String getCurrentColIndentString() {
+        return currentColIndentString.toString();
     }
 
 }
