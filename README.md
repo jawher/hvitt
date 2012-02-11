@@ -17,6 +17,7 @@ Here's a quick sample of how `hvitt` can be used to lex an input into tokens bas
 Given this input (a gcd implementation in Python, a well known whitespace-sensitive language):
 
 ```python
+\# gcd implementation
 def gcd(a, b):
     while b:
         a, b = b, a%b
@@ -25,9 +26,9 @@ def gcd(a, b):
 gcd(7, 21)
 ```
 
+## Configuration
 We start by defining the lexing rules the `hvitt` lexer will use to divide the input into tokens:
-
-## Java configuration
+### Java configuration
 `hvitt` lexing rules can be configured using a java api, as shown in the following example:
 
 ```java
@@ -42,12 +43,15 @@ cfg.addRegexRule("NAME", "[a-zA-Z][a-zA-Z0-9_]*");
 // We also define the numbers using a regular expression
 cfg.addRegexRule("NUMBER", "-?[0-9]+");
 
-// We finally define symbols using a list of string literals
+// We define symbols using a list of string literals
 cfg.addLiteralRule("SYMBOL", "(", ")", ":", "=", "%", ",", "%");
+
+// We can instruct hvitt to ignore comments by using a special token key "IGNORE" (the key can be customized using cfg.ignoreKey)
+cfg.addRegexRule("IGNORE", "#.*");
 ```
 To define a lexing rule, we need to provide a key that'll identify the class of the tokens (a number, a symbol, etc.) and a list of literals and/or regular expressions describing the kind of inputs the token represents.
 
-## File configuration
+### File configuration
 `hvitt` lexing rules can also be defined using an external text configuration file in nearly but note quite a (((E|A)?B)|G)NF syntax. The same rule set configured in the example above can be represented in a file:
 
     KEYWORD: 'def' | 'while' | 'return';
@@ -67,6 +71,7 @@ You can also split a token definition in multiple rules, and its definition will
     KEYWORD: 'while';
     KEYWORD: 'return';
     NAME: /[a-zA-Z][a-zA-Z0-9_]*/;
+    IGNORE: /#.*/;
 
 To create a lexer configuration from a rules definition file, you use the `LexerConfigLoader` class:
 

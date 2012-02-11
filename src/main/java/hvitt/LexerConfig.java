@@ -27,6 +27,7 @@ public class LexerConfig {
     public String deindentKey = "DEINDENT";
     public String newLineKey = "NEWLINE";
     public String eofKey = "EOF";
+    public String ignoreKey = "IGNORE";
 
     List<Pair<String, List<HMatcher>>> matchers = new ArrayList<Pair<String, List<HMatcher>>>();
 

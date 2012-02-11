@@ -50,7 +50,8 @@ public class Lexer {
     private String line;
     private int lastIndentLen = 0;
     private boolean eof = false;
-    boolean newLine = false;
+    private boolean newLine = false;
+    private boolean returnedSomething = false;
     private int row = 0, col = 0;
     private Token lastToken = null;
 
@@ -103,6 +104,7 @@ public class Lexer {
         if (lastToken != null) {
             Token res = lastToken;
             lastToken = null;
+            returnedSomething = true;
             return res;
         } else if (eof) {
             return new Token(cfg.eofKey, "$", row, col);
@@ -115,11 +117,10 @@ public class Lexer {
                     reader.close();
                     return new Token(cfg.eofKey, "$", row, col);
                 } else {
-
                     row++;
                     col = 1;
                     newLine = true;
-                    if (row == 1) {
+                    if (!returnedSomething) {
                         return pop();
                     } else {
                         return new Token(cfg.newLineKey, "", row, col);
@@ -158,7 +159,12 @@ public class Lexer {
                 data = chew(kp._2);
                 if (data != null) {
                     chew(whiteSpace);
-                    return new Token(kp._1, data.data, data.row, data.col);
+                    if (cfg.ignoreKey.equals(kp._1)) {
+                        return pop();
+                    } else {
+                        returnedSomething = true;
+                        return new Token(kp._1, data.data, data.row, data.col);
+                    }
                 }
             }
 
@@ -178,7 +184,7 @@ public class Lexer {
             return null;
         }
     }
-    
+
     public String getRawLine() {
         return rawLine;
     }
