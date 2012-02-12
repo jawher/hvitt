@@ -117,7 +117,7 @@ public class LexerConfigLoader {
         metaCfg.addRegexRule(LITERAL, "'(\\\\.|[^'])*?'");
         metaCfg.addRegexRule(REGEX, "/(\\\\.|[^/])*?/");
 
-        Lexer l = new Lexer(cfgFile, metaCfg);
+        Lexer l = new HvittLexer(cfgFile, metaCfg);
         LexerConfigParser p = new LexerConfigParser(l);
         p.parse(cfg);
     }
