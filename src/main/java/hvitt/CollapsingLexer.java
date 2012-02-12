@@ -20,7 +20,7 @@ public class CollapsingLexer implements Lexer {
         return currentToken;
     }
 
-    public Token pop() throws UnrecognizedInput {
+    public Token pop() throws LexingException {
         if (currentToken != null) {
             Token res = currentToken;
             currentToken = null;

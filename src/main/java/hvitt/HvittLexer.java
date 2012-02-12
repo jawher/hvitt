@@ -102,7 +102,7 @@ public class HvittLexer implements Lexer {
         return currentToken;
     }
 
-    public Token pop() throws UnrecognizedInput {
+    public Token pop() throws LexingException {
         if (currentToken != null) {
             Token res = currentToken;
             currentToken = null;
@@ -175,7 +175,7 @@ public class HvittLexer implements Lexer {
                             }
                         }
                         if (!ignore) {
-                            throw new UnrecognizedInput(rawLine, row, col, currentColIndentString.toString());
+                            throw new LexingException("Unrecognized input", rawLine, row, col, currentColIndentString.toString());
                         }
                     }
                     break;
