@@ -133,25 +133,26 @@ public class HvittLexer implements Lexer {
                 case EOF:
                     return eofToken;
                 case NL:
-                    state = State.LN;
                     if (line.trim().isEmpty()) {
                         state = State.S;
                         return new Token(cfg.newLineKey, line, row, col);
-                    }
-                    PosString indent = chew(whiteSpace);
-                    if (indent == null) {
-                        indent = new PosString("", row, 1);
-                    }
-                    currentColIndentString.append(indent.data);
-                    int indentLen = indent.data.length();
-                    if (indentLen > lastIndentLen) {
-                        lastIndentLen = indentLen;
-                        return new Token(cfg.indentKey, indent.data, indent.row, indent.col);
-                    } else if (indentLen < lastIndentLen) {
-                        lastIndentLen = indentLen;
-                        return new Token(cfg.deindentKey, indent.data, indent.row, indent.col);
                     } else {
-                        return new Token(cfg.newLineKey, indent.data, indent.row, indent.col);
+                        state = State.LN;
+                        PosString indent = chew(whiteSpace);
+                        if (indent == null) {
+                            indent = new PosString("", row, 1);
+                        }
+                        currentColIndentString.append(indent.data);
+                        int indentLen = indent.data.length();
+                        if (indentLen > lastIndentLen) {
+                            lastIndentLen = indentLen;
+                            return new Token(cfg.indentKey, indent.data, indent.row, indent.col);
+                        } else if (indentLen < lastIndentLen) {
+                            lastIndentLen = indentLen;
+                            return new Token(cfg.deindentKey, indent.data, indent.row, indent.col);
+                        } else if (row > 1) {
+                            return new Token(cfg.newLineKey, indent.data, indent.row, indent.col);
+                        }
                     }
                 case LN:
                     if (line.isEmpty()) {
