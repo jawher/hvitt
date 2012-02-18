@@ -81,10 +81,10 @@ public class StructuredLexer implements Lexer {
     }
 
     public String getRawLine() {
-        return null;
+        return lexer.getRawLine();
     }
 
     public String getCurrentColIndentString() {
-        return null;
+        return lexer.getCurrentColIndentString();
     }
 }
